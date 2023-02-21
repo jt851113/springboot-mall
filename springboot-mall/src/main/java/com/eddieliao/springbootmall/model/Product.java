@@ -1,11 +1,13 @@
 package com.eddieliao.springbootmall.model;
 
+import com.eddieliao.springbootmall.constant.ProductCategory;
+
 import java.util.Date;
 
 public class Product {
  private Integer productId;
  private String prodcutName;
- private String category;
+ private ProductCategory category;
  private String imageUrl;
  private Integer price;
  private Integer stock;
@@ -29,11 +31,11 @@ public class Product {
         this.prodcutName = prodcutName;
     }
 
-    public String getCategory() {
+    public ProductCategory getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(ProductCategory category) {
         this.category = category;
     }
 
