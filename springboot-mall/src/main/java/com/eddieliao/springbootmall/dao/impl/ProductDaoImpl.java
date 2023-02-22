@@ -28,16 +28,7 @@ public class ProductDaoImpl implements ProductDao {
 
         Map<String, Object> map = new HashMap<>();
 
-        if(productQueryParams.getCategory() != null){
-            sql = sql + " AND category = :category";
-            // AND前記得空白鍵
-            map.put("category",productQueryParams.getCategory().name());
-            // 因為是enum 所以要用.name()轉換成字串
-        }
-        if(productQueryParams.getSearch() != null){
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search","%"+ productQueryParams.getSearch() +"%");
-        }
+        sql = addFilteringSql(sql, map, productQueryParams);
 
         Integer total = namedParameterJdbcTemplate.
                 queryForObject(sql, map, Integer.class);
@@ -53,17 +44,8 @@ public class ProductDaoImpl implements ProductDao {
                 "FROM product WHERE 1=1";
         // WHERE 1=1 是為了能夠順利拼接下面的category部分
         Map<String, Object> map = new HashMap<>();
-
-        if(productQueryParams.getCategory() != null){
-            sql = sql + " AND category = :category";
-            // AND前記得空白鍵
-            map.put("category",productQueryParams.getCategory().name());
-            // 因為是enum 所以要用.name()轉換成字串
-        }
-        if(productQueryParams.getSearch() != null){
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search","%"+ productQueryParams.getSearch() +"%");
-        }
+        //查詢條件
+        sql = addFilteringSql(sql, map, productQueryParams);
 
         // 我們有給定default value 不用check null
         // 排序
@@ -74,8 +56,6 @@ public class ProductDaoImpl implements ProductDao {
         sql = sql + " LIMIT :limit OFFSET :offset";
         map.put("limit",productQueryParams.getLimit());
         map.put("offset",productQueryParams.getOffset());
-
-
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql,map, new ProductRowMapper());
 
@@ -158,5 +138,22 @@ public class ProductDaoImpl implements ProductDao {
 
         namedParameterJdbcTemplate.update(sql, map);
 
+    }
+
+    private String addFilteringSql(String sql, Map<String, Object> map,
+                                   ProductQueryParams productQueryParams){
+
+        if(productQueryParams.getCategory() != null){
+            sql = sql + " AND category = :category";
+            // AND前記得空白鍵
+            map.put("category",productQueryParams.getCategory().name());
+            // 因為是enum 所以要用.name()轉換成字串
+        }
+        if(productQueryParams.getSearch() != null){
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search","%"+ productQueryParams.getSearch() +"%");
+        }
+
+        return sql;
     }
 }
