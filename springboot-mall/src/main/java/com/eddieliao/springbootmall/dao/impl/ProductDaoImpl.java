@@ -32,18 +32,25 @@ public class ProductDaoImpl implements ProductDao {
 
         if(productQueryParams.getCategory() != null){
             sql = sql + " AND category = :category";
-            //AND前記得空白鍵
+            // AND前記得空白鍵
             map.put("category",productQueryParams.getCategory().name());
-            //因為是enum 所以要用.name()轉換成字串
+            // 因為是enum 所以要用.name()轉換成字串
         }
         if(productQueryParams.getSearch() != null){
             sql = sql + " AND product_name LIKE :search";
             map.put("search","%"+ productQueryParams.getSearch() +"%");
         }
 
-        //我們有給定default value 不用check null
+        // 我們有給定default value 不用check null
+        // 排序
         sql = sql + " ORDER BY " + productQueryParams.getOrderBy()+" "+
                 productQueryParams.getSort();
+
+        // 分頁
+        sql = sql + " LIMIT :limit OFFSET :offset";
+        map.put("limit",productQueryParams.getLimit());
+        map.put("offset",productQueryParams.getOffset());
+
 
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql,map, new ProductRowMapper());
