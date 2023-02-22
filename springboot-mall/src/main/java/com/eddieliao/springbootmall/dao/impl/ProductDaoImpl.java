@@ -1,9 +1,11 @@
 package com.eddieliao.springbootmall.dao.impl;
 
+import com.eddieliao.springbootmall.constant.ProductCategory;
 import com.eddieliao.springbootmall.dao.ProductDao;
 import com.eddieliao.springbootmall.dto.ProductRequest;
 import com.eddieliao.springbootmall.model.Product;
 import com.eddieliao.springbootmall.rowmapper.ProductRowMapper;
+import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -22,11 +24,23 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductCategory category,String search) {
         String sql = "SELECT product_id,product_name, category, image_url, price, stock, description, " +
-                "created_date, last_modified_date FROM product";
-
+                "created_date, last_modified_date " +
+                "FROM product WHERE 1=1";
+        // WHERE 1=1 是為了能夠順利拼接下面的category部分
         Map<String, Object> map = new HashMap<>();
+
+        if(category != null){
+            sql = sql + " AND category = :category";
+            //AND前記得空白鍵
+            map.put("category",category.name());
+        }
+        if(search != null){
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search","%"+ search +"%");
+        }
+
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql,map, new ProductRowMapper());
 
