@@ -1,27 +1,27 @@
-package com.eddieliao.springbootmall.model;
+package com.eddieliao.springbootmall.dto;
 
 import com.eddieliao.springbootmall.constant.ProductCategory;
+import jakarta.validation.constraints.NotNull;
 
-import java.util.Date;
 
-public class Product {
- private Integer productId;
- private String productName;
- private ProductCategory category;
- private String imageUrl;
- private Integer price;
- private Integer stock;
- private String description;
- private Date createdDate;
- private Date lastModifiedDate;
+public class ProductRequest {
+    @NotNull
+    private String productName;
 
-    public Integer getProductId() {
-        return productId;
-    }
+    @NotNull
+    private ProductCategory category;
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
+    @NotNull
+    private String imageUrl;
+
+    @NotNull
+    private Integer price;
+
+    @NotNull
+    private Integer stock;
+
+
+    private String description;
 
     public String getProductName() {
         return productName;
@@ -69,21 +69,5 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
     }
 }
