@@ -1,7 +1,7 @@
 package com.eddieliao.springbootmall.service.impl;
 
-import com.eddieliao.springbootmall.constant.ProductCategory;
 import com.eddieliao.springbootmall.dao.ProductDao;
+import com.eddieliao.springbootmall.dto.ProductQueryParams;
 import com.eddieliao.springbootmall.dto.ProductRequest;
 import com.eddieliao.springbootmall.model.Product;
 import com.eddieliao.springbootmall.service.ProductService;
@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProducts(ProductCategory category,String search) {
-        return productDao.getProducts(category,search);
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
+        return productDao.getProducts(productQueryParams);
     }
 }
